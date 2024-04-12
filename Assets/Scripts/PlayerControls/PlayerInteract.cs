@@ -6,6 +6,8 @@ using TMPro;
 [RequireComponent(typeof(Player))]
 public class PlayerInteract : MonoBehaviour
 {
+    // https://www.youtube.com/watch?v=_yf5vzZ2sYE
+
     [SerializeField] TMP_Text interactText;
     [SerializeField] Image interactBar;
     [SerializeField] float interactDistance = 5f;
@@ -46,6 +48,8 @@ public class PlayerInteract : MonoBehaviour
             if (hit.collider.TryGetComponent<Interactable>(out Interactable interactable))
             {
                 interactText.text = interactable.interactMessage;
+
+                // handle outline
                 interactable.outline.OutlineWidth = 5f;
                 lastInteractable = interactable;
 

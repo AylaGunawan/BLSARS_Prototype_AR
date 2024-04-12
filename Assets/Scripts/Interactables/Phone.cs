@@ -15,8 +15,9 @@ public class Phone : Interactable
         base.Interact();
 
         //stageManagerScript.interactionObjects.Add(gameObject);
-        gameObject.SetActive(false);
 
-        // call phone
+        gameManager.cprMode = true;
+
+        gameObject.SetActive(false);
     }
 }

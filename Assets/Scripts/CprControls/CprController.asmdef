@@ -1,8 +1,8 @@
 {
-    "name": "InteractableController",
+    "name": "CprController",
     "rootNamespace": "",
     "references": [
-        "GUID:9f02e8f095c4c4a57b9202d58f5e7300"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
     [SerializeField] float mass = 1f; // "fallSpeed"
     [SerializeField] float acceleration = 20f;
 
+    GameManager gameManager;
+    StageManager stageManager;
+
     CharacterController controller;
     PlayerInput playerInput;
     InputAction moveAction;
@@ -29,14 +32,21 @@ public class Player : MonoBehaviour
     Vector2 look;
     Vector3 velocity;
 
-    internal float moveSpeedMultiplier; 
+    PlayerInteract playerInteract;
+
+    internal float moveSpeedMultiplier;
      
     void Awake()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        stageManager = GameObject.FindGameObjectWithTag("StageManager").GetComponent<StageManager>();
+
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["move"];
         lookAction = playerInput.actions["look"];
+
+        playerInteract = GetComponent<PlayerInteract>();
     }
 
     void Start()
@@ -49,6 +59,19 @@ public class Player : MonoBehaviour
         UpdateGravity();
         UpdateMove();
         UpdateLook();
+        UpdateMode();
+    }
+
+    void UpdateMode()
+    {
+        if (gameManager.cprMode)
+        {
+
+        }
+        else
+        {
+
+        }
     }
 
     void UpdateGravity()

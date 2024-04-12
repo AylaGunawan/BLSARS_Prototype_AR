@@ -266,7 +266,7 @@
                 {
                     "name": "",
                     "id": "c42e653f-f0e9-45d4-9702-1bdbcef5e7d6",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/backspace",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -809,6 +809,54 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Cpr",
+            "id": "58222c8e-4387-44fc-8437-8704ea2feca7",
+            "actions": [
+                {
+                    "name": "Compress",
+                    "type": "Button",
+                    "id": "a4dc3140-c515-438e-b001-a31f821783a9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Breath",
+                    "type": "Button",
+                    "id": "0be5abbe-4084-4db8-9e4a-7f868ee25e2c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cc74302b-74d4-4778-ad45-48bf55403b03",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Compress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5e48d1f9-bd92-44e4-8322-fcd6adae01c7",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Breath",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

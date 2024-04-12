@@ -1,15 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Outline))]
 public class Interactable : MonoBehaviour
 {
     public Outline outline;
     public string interactMessage;
 
+    protected GameManager gameManager;
+    protected StageManager stageManager;
+
     void Awake()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        stageManager = GameObject.FindGameObjectWithTag("StageManager").GetComponent<StageManager>();
+
         outline = GetComponent<Outline>();
     }
 
