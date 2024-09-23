@@ -16,7 +16,7 @@ public class Phone : Interactable
 
         //stageManagerScript.interactionObjects.Add(gameObject);
 
-        gameManager.cprMode = true;
+        GameManager.Instance.cprCompressMode = true;
 
         gameObject.SetActive(false);
     }

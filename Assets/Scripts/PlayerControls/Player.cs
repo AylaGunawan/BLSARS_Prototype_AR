@@ -22,8 +22,8 @@ public class Player : MonoBehaviour
     [SerializeField] float mass = 1f; // "fallSpeed"
     [SerializeField] float acceleration = 20f;
 
-    GameManager gameManager;
-    StageManager stageManager;
+    //GameManager gameManager;
+    //StageManager stageManager;
 
     CharacterController controller;
     PlayerInput playerInput;
@@ -38,8 +38,8 @@ public class Player : MonoBehaviour
      
     void Awake()
     {
-        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        stageManager = GameObject.FindGameObjectWithTag("StageManager").GetComponent<StageManager>();
+        //gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        //stageManager = GameObject.FindGameObjectWithTag("StageManager").GetComponent<StageManager>();
 
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
 
     void UpdateMode()
     {
-        if (gameManager.cprMode)
+        if (GameManager.Instance.cprCompressMode)
         {
 
         }

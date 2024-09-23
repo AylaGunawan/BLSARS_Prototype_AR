@@ -9,11 +9,25 @@ public class GameManager : MonoBehaviour
 {
     //internal Gamemode gamemode;
 
-    public bool cprMode;
+    public static GameManager Instance { get; private set; }
+
+    public bool cprCompressMode;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {
-        cprMode = false;
+        cprCompressMode = false;
     }
 
     void Update()
