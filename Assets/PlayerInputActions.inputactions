@@ -828,7 +828,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Breath",
+                    "name": "Breathe",
                     "type": "Button",
                     "id": "0be5abbe-4084-4db8-9e4a-7f868ee25e2c",
                     "expectedControlType": "Button",
@@ -852,11 +852,11 @@
                 {
                     "name": "",
                     "id": "5e48d1f9-bd92-44e4-8322-fcd6adae01c7",
-                    "path": "<Keyboard>/rightShift",
+                    "path": "<Keyboard>/b",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Breath",
+                    "action": "Breathe",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -491,6 +491,113 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &312698710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 312698711}
+  - component: {fileID: 312698714}
+  - component: {fileID: 312698713}
+  - component: {fileID: 312698712}
+  m_Layer: 5
+  m_Name: CprBreath
+  m_TagString: CprDrum
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &312698711
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312698710}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.2457421, y: 1.2457421, z: 1.2457421}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 755373786}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 200}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &312698712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312698710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 7347b6042ec9e40c4a3cbd7077c91e67, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 1
+  m_FillAmount: 0
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &312698713
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312698710}
+  m_CullTransparentMesh: 1
+--- !u!114 &312698714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312698710}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 9e2781b7e1d3040b3b7d583b3a91195c,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Cpr
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &403932467
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,6 +1167,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1217043866}
+  - {fileID: 312698711}
   - {fileID: 1960266386}
   m_Father: {fileID: 271913077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1092,7 +1200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82e4b4042a6b84fdaaf93cfac4476773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cprCompressMode: 0
+  gameMode: 0
 --- !u!4 &861152590
 Transform:
   m_ObjectHideFlags: 0
@@ -1234,7 +1342,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1217043866
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1755,11 +1863,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManagerObject: {fileID: 861152588}
   drumObject: {fileID: 1217043865}
+  breathBar: {fileID: 312698712}
   beatPrefab: {fileID: 993835700592582748, guid: 2d2eb62b508d24a34ae93604a240f764,
     type: 3}
   scoreText: {fileID: 755161242}
   beatFrequency: 1
   music: {fileID: 0}
+  cprMode: 0
+  breathCounter: 0
+  isBreathing: 0
   beatsPassed: 0
   beatCounter: 0
   isCompressing: 0
@@ -2039,12 +2151,12 @@ PrefabInstance:
     - target: {fileID: 2928372166709882133, guid: 2d2eb62b508d24a34ae93604a240f764,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 75
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 2928372166709882133, guid: 2d2eb62b508d24a34ae93604a240f764,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 75
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 2928372166709882133, guid: 2d2eb62b508d24a34ae93604a240f764,
         type: 3}

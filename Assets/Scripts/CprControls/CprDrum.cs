@@ -38,12 +38,12 @@ public class CprDrum : MonoBehaviour
         }
     }
 
-    public void SetActive()
+    public void SetPressed()
     {
         sprite.color = activeColor;
     }
 
-    public void SetInactive()
+    public void SetUnpressed()
     {
         sprite.color = inactiveColor;
     }

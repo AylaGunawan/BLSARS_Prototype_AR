@@ -1,17 +1,15 @@
 using UnityEngine;
 
-//enum Gamemode
-//{
-//    MAIN, CPR, EVAL
-//}
+public enum GameMode
+{
+    MAIN, CPR, EVAL
+}
 
 public class GameManager : MonoBehaviour
 {
-    //internal Gamemode gamemode;
-
     public static GameManager Instance { get; private set; }
 
-    public bool cprCompressMode;
+    [SerializeField] public GameMode gameMode;
 
     void Awake()
     {
@@ -27,7 +25,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        cprCompressMode = false;
+        //cprMode = false;
+        gameMode = GameMode.CPR;
+        
     }
 
     void Update()

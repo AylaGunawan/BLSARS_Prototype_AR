@@ -64,14 +64,14 @@ public class Player : MonoBehaviour
 
     void UpdateMode()
     {
-        if (GameManager.Instance.cprCompressMode)
-        {
+        //if (GameManager.Instance.gameMode == GameMode.MAIN)
+        //{
 
-        }
-        else
-        {
+        //}
+        //else
+        //{
 
-        }
+        //}
     }
 
     void UpdateGravity()

@@ -15,8 +15,7 @@ public class Phone : Interactable
         base.Interact();
 
         //stageManagerScript.interactionObjects.Add(gameObject);
-
-        GameManager.Instance.cprCompressMode = true;
+        //GameManager.Instance.gameMode = GameMode.CPR;
 
         gameObject.SetActive(false);
     }

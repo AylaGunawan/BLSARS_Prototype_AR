@@ -1,36 +1,49 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using TMPro;
+
+enum CprMode
+{
+    COMPRESS, BREATHE
+}
 
 public class CprManager : MonoBehaviour
 {
     [SerializeField] GameObject gameManagerObject;
     [SerializeField] GameObject drumObject;
+    [SerializeField] Image breathBar;
     [SerializeField] GameObject beatPrefab;
     [SerializeField] TMP_Text scoreText;
     [SerializeField] float beatFrequency = 1f; // 1 beat per second
     [SerializeField] AudioSource music;
+    [SerializeField] CprMode cprMode;
 
     GameManager gameManager;
     CprDrum drum;
 
     PlayerInput playerInput;
-    InputAction compressAction;
-
-    // WIP make compress and breath mode in here, not game manager
+    InputAction compressAction; // replace input with movement
+    InputAction breatheAction; // replace input with sound
 
     float beatTimer = 0f;
     float accuracy = 1.0f; // 100%
-    float trueTotal = 0f; // distance total to calculate accuracy
+    float accuracyTotal = 0f; // beat distance total to calculate accuracy
     int beatsHit = 0;
     int beatsMissed = 0;
-    bool isPlaying = false;
 
-    public static CprManager Instance { get; private set; }
+    float breathFill = 0f;
+    float breathMax = 1.0f;
+    int breathCounter = 0; // temp public
+    bool isBreathing = false; // temp public
 
     public int beatsPassed = 0;
     public int beatCounter = 0;
     public bool isCompressing = false;
+
+    bool isPlaying = false;
+
+    public static CprManager Instance { get; private set; }
 
     void Awake()
     {
@@ -48,31 +61,32 @@ public class CprManager : MonoBehaviour
 
         playerInput = GetComponent<PlayerInput>();
         compressAction = playerInput.actions["compress"];
-        scoreText.text = "acc=" + accuracy*100 + "%/hit=" + beatsHit + "/miss=" + beatsMissed;
+        breatheAction = playerInput.actions["breathe"];
     }
 
     void Start()
     {
-
+        cprMode = CprMode.BREATHE;
+        breathBar.enabled = true;
+        scoreText.text = "acc=" + accuracy * 100 + "%/hit=" + beatsHit + "/miss=" + beatsMissed;
     }
 
     void Update()
     {
-        if (gameManager.cprCompressMode == true)
+        if (gameManager.gameMode == GameMode.CPR)
         {
-            if (beatCounter < 30) // 30 compressions
+            // handle compression
+            if (cprMode == CprMode.COMPRESS)
             {
-
-                drumObject.SetActive(true);
                 isCompressing = compressAction.ReadValue<float>() > 0;
 
                 if (isCompressing)
                 {
-                    drum.SetActive();
+                    drum.SetPressed();
                 }
                 else
                 {
-                    drum.SetInactive();
+                    drum.SetUnpressed();
                 }
 
                 beatTimer += Time.deltaTime;
@@ -84,16 +98,57 @@ public class CprManager : MonoBehaviour
                     beatTimer = 0f;
                 }
 
+                if (beatCounter >= 30) // after 30 compressions
+                {
+                    cprMode = CprMode.BREATHE;
+                    drumObject.SetActive(false);
+                    beatTimer = 0f;
+                    DestroyBeats();
+                    beatCounter = 0;
+                }
             }
-            else // 2 breaths WIP
+            // handle breathing
+            if (cprMode == CprMode.BREATHE)
             {
-                beatCounter = 0;
-                DisableDrumBeats();
+                isBreathing = breatheAction.ReadValue<float>() > 0;
+
+                if (isBreathing)
+                {
+                    breathFill += Time.deltaTime;
+                }
+                else
+                {
+                    breathFill -= Time.deltaTime;
+                }
+
+                if (breathFill < 0)
+                {
+                    breathFill = 0;
+                }
+
+                if (breathFill >= breathMax) // when breath is full
+                {
+                    breathCounter += 1;
+                    breathFill = 0f;
+                    isBreathing = false;
+                }
+
+                if (breathCounter >= 2) // after 2 breaths
+                {
+                    cprMode = CprMode.COMPRESS;
+                    drumObject.SetActive(true);
+                    breathCounter = 0;
+                    breathFill = 0f;
+                }
+
+                breathBar.fillAmount = breathFill / breathMax;
             }
         }
         else
         {
-            DisableDrumBeats();
+            drumObject.SetActive(false);
+            beatTimer = 0f;
+            DestroyBeats();
         }
         
     }
@@ -114,25 +169,23 @@ public class CprManager : MonoBehaviour
 
     float calculateAccuracy(float beatDistance)
     {
-        trueTotal += beatDistance;
+        accuracyTotal += beatDistance;
 
         float beatAccuracy;
         if (beatsPassed == 0)
         {
-            beatAccuracy = 100 - trueTotal;
+            beatAccuracy = 100 - accuracyTotal;
         }
         else
         { 
-            beatAccuracy = (100 * beatsPassed) - trueTotal;
+            beatAccuracy = (100 * beatsPassed) - accuracyTotal;
         }
 
         return (Mathf.Ceil(beatAccuracy / beatsPassed) / 100);
     }
 
-    void DisableDrumBeats()
+    void DestroyBeats()
     {
-        drumObject.SetActive(false);
-        beatTimer = 0f;
         GameObject[] beats = GameObject.FindGameObjectsWithTag("CprBeat");
         foreach (GameObject beat in beats)
         {
