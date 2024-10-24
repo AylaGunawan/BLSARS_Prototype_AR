@@ -73,83 +73,88 @@ public class CprManager : MonoBehaviour
 
     void Update()
     {
-        if (gameManager.gameMode == GameMode.CPR)
-        {
+        //if (gameManager.gameMode == GameMode.CPR)
+        //{
             // handle compression
-            if (cprMode == CprMode.COMPRESS)
-            {
-                isCompressing = compressAction.ReadValue<float>() > 0;
-
-                if (isCompressing)
-                {
-                    drum.SetPressed();
-                }
-                else
-                {
-                    drum.SetUnpressed();
-                }
-
-                beatTimer += Time.deltaTime;
-
-                if (beatTimer >= beatFrequency)
-                {
-                    GameObject beatObject = Instantiate(beatPrefab, new Vector3(transform.position.x + 200f, transform.position.y, transform.position.z), Quaternion.identity);
-                    beatObject.transform.parent = drumObject.transform.parent;
-                    beatTimer = 0f;
-                }
-
-                if (beatCounter >= 30) // after 30 compressions
-                {
-                    cprMode = CprMode.BREATHE;
-                    drumObject.SetActive(false);
-                    beatTimer = 0f;
-                    DestroyBeats();
-                    beatCounter = 0;
-                }
-            }
-            // handle breathing
-            if (cprMode == CprMode.BREATHE)
-            {
-                isBreathing = breatheAction.ReadValue<float>() > 0;
-
-                if (isBreathing)
-                {
-                    breathFill += Time.deltaTime;
-                }
-                else
-                {
-                    breathFill -= Time.deltaTime;
-                }
-
-                if (breathFill < 0)
-                {
-                    breathFill = 0;
-                }
-
-                if (breathFill >= breathMax) // when breath is full
-                {
-                    breathCounter += 1;
-                    breathFill = 0f;
-                    isBreathing = false;
-                }
-
-                if (breathCounter >= 2) // after 2 breaths
-                {
-                    cprMode = CprMode.COMPRESS;
-                    drumObject.SetActive(true);
-                    breathCounter = 0;
-                    breathFill = 0f;
-                }
-
-                breathBar.fillAmount = breathFill / breathMax;
-            }
-        }
-        else
+        if (cprMode == CprMode.COMPRESS)
         {
-            drumObject.SetActive(false);
-            beatTimer = 0f;
-            DestroyBeats();
+            isCompressing = compressAction.ReadValue<float>() > 0;
+
+            if (isCompressing)
+            {
+                drum.SetPressed();
+            }
+            else
+            {
+                drum.SetUnpressed();
+            }
+
+            beatTimer += Time.deltaTime;
+            //Debug.Log(beatTimer);
+
+            if (beatTimer >= beatFrequency) 
+            {
+                Debug.Log(transform.position);
+                GameObject beatObject = Instantiate(beatPrefab, new Vector3(drumObject.transform.position.x + 200f, drumObject.transform.position.y , transform.position.z), Quaternion.identity, drumObject.transform.parent);
+                //beatObject.transform.SetParent(drumObject.transform.parent);// = drumObject.transform.parent;
+
+                //beatObject.transform.parent = drumObject.;
+                beatTimer = 0f;
+            }
+
+            if (beatCounter >= 30) // after 30 compressions
+            {
+                cprMode = CprMode.BREATHE;
+                drumObject.SetActive(false);
+                beatTimer = 0f;
+                DestroyBeats();
+                beatCounter = 0;
+            }
         }
+        // handle breathing
+        if (cprMode == CprMode.BREATHE)
+        {
+            isBreathing = breatheAction.ReadValue<float>() > 0;
+
+            if (isBreathing)
+            {
+                breathFill += Time.deltaTime;
+            }
+            else
+            {
+                breathFill -= Time.deltaTime;
+            }
+
+            if (breathFill < 0)
+            {
+                breathFill = 0;
+            }
+
+            if (breathFill >= breathMax) // when breath is full
+            {
+                breathCounter += 1;
+                breathFill = 0f;
+                isBreathing = false;
+            }
+
+            if (breathCounter >= 2) // after 2 breaths
+            {
+                cprMode = CprMode.COMPRESS;
+                drumObject.SetActive(true);
+                breathCounter = 0;
+                breathFill = 0f;
+            }
+
+            breathBar.fillAmount = breathFill / breathMax;
+        }
+        //}
+        //else
+        //{
+        //    drumObject.SetActive(false);
+        //    beatTimer = 0f;
+        //    DestroyBeats();
+        //supposed to account for changing in the main mode and cpr mode
+        //}
         
     }
 
