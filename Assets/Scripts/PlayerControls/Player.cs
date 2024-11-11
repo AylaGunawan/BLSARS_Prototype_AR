@@ -97,6 +97,7 @@ public class Player : MonoBehaviour
         return moveVector;
     }
 
+    //This method is the main input code, handles movement and crouch rn
     private void UpdateMove()
     {
         moveSpeedMultiplier = 1f;
