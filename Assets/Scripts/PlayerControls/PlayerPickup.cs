@@ -42,27 +42,29 @@ public class PlayerPickup : MonoBehaviour
         //Debug.Log(pickUpTimer);
         if (pickedUp)
         {
-            //
-            Vector3 positionVector = (holdPoint.transform.position - currentObjectHeld.transform.position);
+            Vector3 direction = (holdPoint.transform.position - currentObjectHeld.transform.position);
 
-            //making variables
-            var acceleration = positionVector * pickUpForce;
-            var objectMovementDirection = hit.rigidbody.velocity.normalized; //e.g (0.5, 0, 1)
-            var targetDirection = positionVector.normalized; // e.g (0.4, 1, -1)
-
+            //variables
+            var acceleration = direction * pickUpForce;
+            var objectVelocityDirection = hit.rigidbody.velocity.normalized; //e.g (0.5, 0, 1)
+            var targetDirection = direction.normalized; // e.g (0.4, 1, -1)
 
             //if the object velocity direction is SIMILAR to the target direction, slow down the speed
-            if(objectMovementDirection.x > 0 && targetDirection.x > 0 || objectMovementDirection.x < 0 && targetDirection.x < 0 || 
-                objectMovementDirection.y > 0 && targetDirection.y > 0 || objectMovementDirection.y < 0 && targetDirection.y < 0 ||
-                objectMovementDirection.z > 0 && targetDirection.z > 0 || objectMovementDirection.z < 0 && targetDirection.z < 0)
+            if(objectVelocityDirection.x > 0 && targetDirection.x > 0 || objectVelocityDirection.x < 0 && targetDirection.x < 0 || 
+                objectVelocityDirection.y > 0 && targetDirection.y > 0 || objectVelocityDirection.y < 0 && targetDirection.y < 0 ||
+                objectVelocityDirection.z > 0 && targetDirection.z > 0 || objectVelocityDirection.z < 0 && targetDirection.z < 0)
             {
                 //Okay so currently, With this system, the object feels very smooth to move around and you can throw it,
                 //but If you strafe or move without moving the mouse, the object will be very jittery. This will work for a Demo,
-                //but will need to be adjusted for a __3D half build__
-                hit.rigidbody.velocity *= 0.99f;                
+                //but will need to be adjusted for a 3D half build
+                hit.rigidbody.velocity *= 0.99f;
+
+
+                //hit.rigidbody.velocity = new Vector3(Mathf.Lerp(hit.rigidbody.velocity.x, 0, Time.deltaTime * 5), Mathf.Lerp(hit.rigidbody.velocity.y, 0, Time.deltaTime * 5), Mathf.Lerp(hit.rigidbody.velocity.z, 0, Time.deltaTime * 5));
+                
             }
 
-            if (positionVector.magnitude != 0)
+            if (direction.magnitude != 0)
             {
                 hit.rigidbody.velocity = hit.rigidbody.velocity + acceleration;
             }
@@ -93,23 +95,28 @@ public class PlayerPickup : MonoBehaviour
         {
             if (pickUpAction.IsPressed()) //if the player is pressing the button to hold:
             {
-                if (pickedUp) //if we already have object picked up
-                {
-
-                    hit.rigidbody.useGravity = true;
-                    currentObjectHeld = null; //stop picking it up
-                    pickedUp = false;
-                }
                 if (Physics.Raycast(ray, out hit, pickUpRange, holdMasks)) //and we hit something in range in the correct layer
                 {
-                    if (!pickedUp) //if we dont currently have an object picked up
+                    if (pickedUp) //if we already have object picked up
+                    {
+                        currentObjectHeld = null; //stop picking it up
+                        pickedUp = false;
+                    }
+                    else //if we dont currently have an object picked up
                     {
                         currentObjectHeld = hit.collider.gameObject; //make the hit object, the held object
-                        hit.rigidbody.useGravity = false; //stops gravity for the picked up object
                         pickedUp = true;
                     }
                     pickUpTimer = pickUpCooldown;
                 }
+                else
+                {
+                    //im annoyed that I have to do this twice
+                    currentObjectHeld = null; //stop picking it up
+                    pickedUp = false;
+                }
+                
+                
             }
         } 
     }
