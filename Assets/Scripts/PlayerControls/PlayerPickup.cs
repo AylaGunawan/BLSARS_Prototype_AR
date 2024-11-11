@@ -39,28 +39,33 @@ public class PlayerPickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(pickUpTimer);
+        //Debug.Log(pickUpTimer);
         if (pickedUp)
         {
-            Vector3 direction = (holdPoint.transform.position - currentObjectHeld.transform.position);
+            //
+            Vector3 positionVector = (holdPoint.transform.position - currentObjectHeld.transform.position);
+
+            //making variables
+            var acceleration = positionVector * pickUpForce;
+            var objectMovementDirection = hit.rigidbody.velocity.normalized; //e.g (0.5, 0, 1)
+            var targetDirection = positionVector.normalized; // e.g (0.4, 1, -1)
 
 
-            //var factor = 20f * Time.deltaTime;
-            //hit.rigidbody.velocity = new Vector3(Mathf.Lerp(hit.rigidbody.velocity.x, (hit.rigidbody.velocity + direction * pickUpForce).x, factor), Mathf.Lerp(hit.rigidbody.velocity.y, (hit.rigidbody.velocity + direction * pickUpForce).y, factor), Mathf.Lerp(hit.rigidbody.velocity.z, (hit.rigidbody.velocity + direction * pickUpForce).z, factor));
-            //Mathf.Lerp()
-
-            //var uhh = direction.magnitude / 10;
-            //;
-
-            
-            //TODO: I need to find a better algortithm to get picked up objects to slow down as they get to the center of the pick up point
-            if (direction.magnitude != 0)
+            //if the object velocity direction is SIMILAR to the target direction, slow down the speed
+            if(objectMovementDirection.x > 0 && targetDirection.x > 0 || objectMovementDirection.x < 0 && targetDirection.x < 0 || 
+                objectMovementDirection.y > 0 && targetDirection.y > 0 || objectMovementDirection.y < 0 && targetDirection.y < 0 ||
+                objectMovementDirection.z > 0 && targetDirection.z > 0 || objectMovementDirection.z < 0 && targetDirection.z < 0)
             {
-                hit.rigidbody.velocity = hit.rigidbody.velocity + (direction * pickUpForce * Mathf.Sqrt(direction.magnitude));
+                //Okay so currently, With this system, the object feels very smooth to move around and you can throw it,
+                //but If you strafe or move without moving the mouse, the object will be very jittery. This will work for a Demo,
+                //but will need to be adjusted for a __3D half build__
+                hit.rigidbody.velocity *= 0.99f;                
             }
 
-            
-
+            if (positionVector.magnitude != 0)
+            {
+                hit.rigidbody.velocity = hit.rigidbody.velocity + acceleration;
+            }
             //currentObjectHeld.transform.position = holdPoint.transform.position;
         }
         if (pickUpTimer > 0)
@@ -88,19 +93,17 @@ public class PlayerPickup : MonoBehaviour
         {
             if (pickUpAction.IsPressed()) //if the player is pressing the button to hold:
             {
+                if (pickedUp) //if we already have object picked up
+                {
+
+                    hit.rigidbody.useGravity = true;
+                    currentObjectHeld = null; //stop picking it up
+                    pickedUp = false;
+                }
                 if (Physics.Raycast(ray, out hit, pickUpRange, holdMasks)) //and we hit something in range in the correct layer
                 {
-                    if (pickedUp) //if we already have object picked up
+                    if (!pickedUp) //if we dont currently have an object picked up
                     {
-
-                        hit.rigidbody.useGravity = true;
-                        currentObjectHeld = null; //stop picking it up
-                        pickedUp = false;
-
-                    }
-                    else //if we dont currently have an object picked up
-                    {
-
                         currentObjectHeld = hit.collider.gameObject; //make the hit object, the held object
                         hit.rigidbody.useGravity = false; //stops gravity for the picked up object
                         pickedUp = true;
