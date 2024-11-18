@@ -1261,6 +1261,7 @@ GameObject:
   - component: {fileID: 1011868959}
   - component: {fileID: 1011868958}
   - component: {fileID: 1011868963}
+  - component: {fileID: 1011868964}
   m_Layer: 11
   m_Name: testBox
   m_TagString: Untagged
@@ -1395,10 +1396,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 0
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &1011868964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011868957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0a1eeeb80cacd4282fd0ffca321c0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outline: {fileID: 0}
+  interactMessage: '> interact with a danger_box'
 --- !u!1 &1196253364
 GameObject:
   m_ObjectHideFlags: 0
