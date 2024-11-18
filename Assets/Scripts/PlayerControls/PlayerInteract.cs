@@ -16,7 +16,10 @@ public class PlayerInteract : MonoBehaviour
     Player player;
     PlayerInput playerInput;
     InputAction interactAction;
+
+    //masks
     LayerMask interactMasks;
+    LayerMask dangerMasks;
     Interactable lastInteractable = null;
 
     float interactTimer = 0f;
@@ -31,12 +34,16 @@ public class PlayerInteract : MonoBehaviour
 
     void Start()
     {
-        interactMasks = LayerMask.GetMask("Danger", "Response", "Send_Help", "Airway", "Breathing", "CPR", "Defibrillation");
+        interactMasks = LayerMask.GetMask("Danger", "Danger_Holdable", "Response", "Send_Help", "Airway", "Breathing", "CPR", "Defibrillation");
+        dangerMasks = LayerMask.GetMask("Danger", "Danger_Holdable");
     }
 
     void Update()
     {
         interactText.text = string.Empty;
+
+        isInteracting = interactAction.ReadValue<float>() > 0;
+
 
         // set up raycast
         Ray ray = new Ray(player.cam.transform.position, player.cam.transform.forward);
@@ -52,20 +59,29 @@ public class PlayerInteract : MonoBehaviour
                 // handle outline
                 interactable.outline.OutlineWidth = 5f;
                 lastInteractable = interactable;
+                // handle interact bar
+                if (isInteracting)
+                    interactTimer += Time.deltaTime;
+                else
+                    interactTimer = 0;
 
-                // handle interact
-                isInteracting = interactAction.ReadValue<float>() > 0;
+
+                interactBar.fillAmount = interactTimer / interactTime;
+
+                //___________________________________________________________DANGER___________________________________________________________?
 
                 if (interactTimer >= interactTime) // when interact is done
                 {
                     interactable.BaseInteract();
                     isInteracting = false;
                 }
+
             }
         }
         else
         {
             isInteracting = false;
+            interactBar.fillAmount = 0;
 
             // handle outline removal
             if (lastInteractable != null)
@@ -75,15 +91,42 @@ public class PlayerInteract : MonoBehaviour
             }
         }
 
-        // handle interact bar
-        if (isInteracting)
-        {
-            interactTimer += Time.deltaTime;
-        }
-        else
-        {
-            interactTimer = 0;
-        }
-        interactBar.fillAmount = interactTimer / interactTime;
+        
+    }
+
+
+    private void OnBeforeMove()
+    {
+        //// check if player is trying to interact
+        //bool 
+
+
+        //// set up raycast to make sure we can only interact with interactables
+        //Ray ray = new Ray(player.cam.transform.position, player.cam.transform.forward);
+        //RaycastHit hit;
+        //// handle raycast
+
+        ////Because I've moved the interact code here, the phone will temporarily not work
+
+        ////___________________________________________________________DANGER___________________________________________________________
+
+        ////if we hit something considered a danger this will be true.
+        //bool interactableHit = Physics.Raycast(ray, out hit, interactDistance, dangerMasks) ? true : false;
+        //if (interactableHit)
+        //{
+        //    //if the object has the interactable component
+        //    if (hit.collider.TryGetComponent<Interactable>(out Interactable interactable))
+        //    {
+                
+        //    }
+        //}
+        //else
+        //{
+        //    interactBar.fillAmount = 0;
+        //}
+
+
+
+
     }
 }

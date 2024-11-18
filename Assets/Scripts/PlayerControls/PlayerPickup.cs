@@ -33,7 +33,7 @@ public class PlayerPickup : MonoBehaviour
     void Start()
     {
         pickedUp = false;
-        holdMasks = LayerMask.GetMask("Holdable");
+        holdMasks = LayerMask.GetMask("Holdable", "Danger_Holdable");
     }
 
     // Update is called once per frame
@@ -57,7 +57,7 @@ public class PlayerPickup : MonoBehaviour
                 //Okay so currently, With this system, the object feels very smooth to move around and you can throw it,
                 //but If you strafe or move without moving the mouse, the object will be very jittery. This will work for a Demo,
                 //but will need to be adjusted for a 3D half build
-                hit.rigidbody.velocity *= 0.99f;
+                hit.rigidbody.velocity *= 0.98f;
 
 
                 //hit.rigidbody.velocity = new Vector3(Mathf.Lerp(hit.rigidbody.velocity.x, 0, Time.deltaTime * 5), Mathf.Lerp(hit.rigidbody.velocity.y, 0, Time.deltaTime * 5), Mathf.Lerp(hit.rigidbody.velocity.z, 0, Time.deltaTime * 5));
