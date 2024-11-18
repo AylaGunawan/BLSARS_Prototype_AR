@@ -86,6 +86,7 @@ public class PlayerInteract : MonoBehaviour
             // handle outline removal
             if (lastInteractable != null)
             {
+                if (lastInteractable.outline.OutlineColor != UnityEngine.Color.red)
                 lastInteractable.outline.OutlineWidth = 0f;
                 lastInteractable = null;
             }
