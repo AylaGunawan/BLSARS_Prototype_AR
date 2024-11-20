@@ -50,19 +50,63 @@ public class PlayerPickup : MonoBehaviour
             var targetDirection = direction.normalized; // e.g (0.4, 1, -1)
 
             //if the object velocity direction is SIMILAR to the target direction, slow down the speed
-            if(objectVelocityDirection.x > 0 && targetDirection.x > 0 || objectVelocityDirection.x < 0 && targetDirection.x < 0 || 
+            if (objectVelocityDirection.x > 0 && targetDirection.x > 0 || objectVelocityDirection.x < 0 && targetDirection.x < 0 ||
                 objectVelocityDirection.y > 0 && targetDirection.y > 0 || objectVelocityDirection.y < 0 && targetDirection.y < 0 ||
                 objectVelocityDirection.z > 0 && targetDirection.z > 0 || objectVelocityDirection.z < 0 && targetDirection.z < 0)
             {
+
+                //tried reverse
+                //if (!(objectVelocityDirection.x > 0 && targetDirection.x > 0) || !(objectVelocityDirection.x < 0 && targetDirection.x < 0) ||
+                //    !(objectVelocityDirection.y > 0 && targetDirection.y > 0) || !(objectVelocityDirection.y < 0 && targetDirection.y < 0) ||
+                //    !(objectVelocityDirection.z > 0 && targetDirection.z > 0) || !(objectVelocityDirection.z < 0 && targetDirection.z < 0))
+                //{
+                //      acceleration *= 2;
+
+
+
                 //Okay so currently, With this system, the object feels very smooth to move around and you can throw it,
                 //but If you strafe or move without moving the mouse, the object will be very jittery. This will work for a Demo,
                 //but will need to be adjusted for a 3D half build
                 hit.rigidbody.velocity *= 0.98f;
 
 
+
+                //tried to use derrivative here
+                //acceleration = new Vector3((0.98f / 2) * hit.rigidbody.velocity.x * hit.rigidbody.velocity.x,
+                //    (0.98f / 2) * hit.rigidbody.velocity.y * hit.rigidbody.velocity.y,
+                //    (0.98f / 2) * hit.rigidbody.velocity.z * hit.rigidbody.velocity.z);
+
+                //float decel = 0.2f;
+
+                //if (Mathf.Abs(hit.rigidbody.velocity.x) > 0 )
+                //{
+                //    acceleration.x -= decel;
+
+                //}
+                //if (Mathf.Abs(hit.rigidbody.velocity.y) > 0)
+                //{
+                //    acceleration.y -= decel;
+
+                //}
+                //if (Mathf.Abs(hit.rigidbody.velocity.z) > 0)
+                //{
+                //    acceleration.z -=  decel;
+
+                //}
+                //acceleration = direction * 0.01f;
+                //if (direction.magnitude < 1f)
+                //{
+                //    acceleration *= -0.01f;
+                //}
+
+
+
                 //hit.rigidbody.velocity = new Vector3(Mathf.Lerp(hit.rigidbody.velocity.x, 0, Time.deltaTime * 5), Mathf.Lerp(hit.rigidbody.velocity.y, 0, Time.deltaTime * 5), Mathf.Lerp(hit.rigidbody.velocity.z, 0, Time.deltaTime * 5));
-                
+
             }
+
+            //slow, scaling speed that doesnt feel magnetic, more like sliding
+            //hit.rigidbody.velocity = direction * 0.2f;
 
             if (direction.magnitude != 0)
             {
