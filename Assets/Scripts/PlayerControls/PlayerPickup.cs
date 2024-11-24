@@ -12,6 +12,7 @@ public class PlayerPickup : MonoBehaviour
 
     public Transform holdPoint;
     public Transform artificialCenterPoint;
+    public Transform objectFacing;
     [SerializeField] GameObject currentObjectHeld;
 
     [SerializeField] RaycastHit objectHit;
@@ -19,6 +20,8 @@ public class PlayerPickup : MonoBehaviour
 
 
     [SerializeField] Vector3 localObjectPos;
+    [SerializeField] Vector3 localObjectRot;
+
     //private Quaternion localObjectRot;
     private Vector3 vectorToContact;
 
@@ -76,7 +79,43 @@ public class PlayerPickup : MonoBehaviour
 
             var initialLocalObjectDistance = localObjectPos.magnitude;
 
-            currentObjectHeld.transform.LookAt(currentLocalObjectDirection);
+            var initialLocalObjectRot = localObjectRot;
+
+            //Debug.Log(Mathf.Abs(currentObjectHeld.transform.position.x));
+            
+
+            var angleFromForwardToContact = new Vector3(Mathf.DeltaAngle(currentObjectHeld.transform.forward.x, -initialLocalObjectDirection.x),
+            Mathf.DeltaAngle(currentObjectHeld.transform.forward.y, -initialLocalObjectDirection.y),
+            Mathf.DeltaAngle(currentObjectHeld.transform.forward.z, -initialLocalObjectDirection.z));
+
+            //currentObjectHeld.transform.LookAt(artificialCenterPoint, currentObjectHeld.transform.up);
+
+            var diff = (artificialCenterPoint.position - currentObjectHeld.transform.position).normalized - angleFromForwardToContact.normalized;
+            //+
+
+            currentObjectHeld.transform.forward = (artificialCenterPoint.position - currentObjectHeld.transform.position).normalized - diff;
+            Debug.Log("a" + currentObjectHeld.transform.forward);
+            //currentObjectHeld.transform.forward += ;
+
+            //if (Mathf.Abs(currentObjectHeld.transform.position.x) > Mathf.Abs(artificialCenterPoint.position.x) + 0.01f ||
+            //    Mathf.Abs(currentObjectHeld.transform.position.z) > Mathf.Abs(artificialCenterPoint.position.z) + 0.01f)
+            //{
+            //    objectHit.rigidbody.constraints = RigidbodyConstraints.None;
+            //    //Debug.Log(currentObjectHeld.transform.rotation);
+            //}
+            //else
+            //{
+            //    objectHit.rigidbody.constraints = RigidbodyConstraints.FreezeRotationX;
+            //    objectHit.rigidbody.constraints = RigidbodyConstraints.FreezeRotationZ;
+            //    //currentObjectHeld.transform.rotation.SetLookRotation(Vector3.up);//0, currentObjectHeld.transform.rotation.eulerAngles.y, 0);
+            //}
+
+
+            //if the object is directly under the the center point, then stop trying to look at it, because it causes it to glitch out, instead look straight up and keep y rotational
+
+
+
+            //currentObjectHeld.transform.eulerAngles += localObjectPos;
             //this is the rotation of "forward" this should face towards the centerpoint
             //var localObjectRotation = localObjectRot;
 
@@ -185,11 +224,16 @@ public class PlayerPickup : MonoBehaviour
 
 
         //hit.rigidbody.useGravity = false;
-
+        
 
         currentObjectHeld = objectHit.collider.gameObject; //make the hit object, the held object
         localObjectPos = currentObjectHeld.transform.localPosition;
-        //localObjectRot = currentObjectHeld.transform.rotation;
+
+        
+
+
+
+        localObjectRot = currentObjectHeld.transform.eulerAngles;
         vectorToContact = (artificialCenterPoint.transform.position - currentObjectHeld.transform.position);
 
         pickedUp = true;
