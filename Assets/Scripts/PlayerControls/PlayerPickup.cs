@@ -1,15 +1,26 @@
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
 
 public class PlayerPickup : MonoBehaviour
 {
+    
     Player player;
     PlayerInput input;
     InputAction pickUpAction;
 
     public Transform holdPoint;
+    public Transform artificialCenterPoint;
     [SerializeField] GameObject currentObjectHeld;
+
+    [SerializeField] RaycastHit objectHit;
+
+
+
+    [SerializeField] Vector3 localObjectPos;
+    //private Quaternion localObjectRot;
+    private Vector3 vectorToContact;
 
     public float pickUpRange;
     public float pickUpForce;
@@ -24,7 +35,9 @@ public class PlayerPickup : MonoBehaviour
 
     
 
-    //:O i wake
+    /// <summary>
+    /// Initializes variables
+    /// </summary>
     void Awake()
     {
         player = GetComponent<Player>();
@@ -45,25 +58,74 @@ public class PlayerPickup : MonoBehaviour
     {
         if (pickedUp)
         {
-            Vector3 direction = (holdPoint.transform.position - currentObjectHeld.transform.position);
 
-            //variables
-            var acceleration = direction * pickUpForce;
-            var objectVelocityDirection = hit.rigidbody.velocity.normalized; //e.g (0.5, 0, 1)
-            var targetDirection = direction.normalized; // e.g (0.4, 1, -1)
+            
+            //now that object can be picked up by a contact point and get a new artificial center point, now we need it to swing like a pendulum
 
-            //if the object velocity direction is SIMILAR to the target direction, slow down the speed
-            if (objectVelocityDirection.x > 0 && targetDirection.x > 0 || objectVelocityDirection.x < 0 && targetDirection.x < 0 ||
-                objectVelocityDirection.y > 0 && targetDirection.y > 0 || objectVelocityDirection.y < 0 && targetDirection.y < 0 ||
-                objectVelocityDirection.z > 0 && targetDirection.z > 0 || objectVelocityDirection.z < 0 && targetDirection.z < 0)
+            artificialCenterPoint.position = holdPoint.position;
+
+            //currentObjectHeld.transform.localPosition = localObjectPos;
+
+
+
+            //this will need to be adjusted, but it will look at its center point
             
-                //Okay so currently, With this system, the object feels very smooth to move around and you can throw it,
-                //but If you strafe or move without moving the mouse, the object will be very jittery. This will work for a Demo,
-                //but will need to be adjusted for a 3D half build
-                hit.rigidbody.velocity *= 0.98f;
-            
-            if (direction.magnitude != 0)
-                hit.rigidbody.velocity = hit.rigidbody.velocity + acceleration;
+
+            var initialLocalObjectDirection = localObjectPos.normalized;
+            var currentLocalObjectDirection = currentObjectHeld.transform.localPosition.normalized;
+
+            var initialLocalObjectDistance = localObjectPos.magnitude;
+
+            currentObjectHeld.transform.LookAt(currentLocalObjectDirection);
+            //this is the rotation of "forward" this should face towards the centerpoint
+            //var localObjectRotation = localObjectRot;
+
+            //currentObjectHeld.transform.rotation *= localObjectRotation;
+
+            //if the object is not a localObjectDistance distance away from the artificialCenterPoint
+            //then we want to set the local position to the localObjectDistance * localObjectDirection
+
+            if (currentObjectHeld.transform.localPosition.magnitude != initialLocalObjectDistance)
+            {
+                currentObjectHeld.transform.localPosition = currentObjectHeld.transform.localPosition.normalized * initialLocalObjectDistance;
+            }
+
+            if (objectHit.rigidbody.velocity.magnitude > 3)
+            {
+                objectHit.rigidbody.velocity = objectHit.rigidbody.velocity.normalized * 3f;
+            }
+
+
+            //the part im currently confused about is how to mkae this system for physicsy. as of right now, the box will be picked up at a location (pog)
+            //and it will swing down till it reaches the bottom of the pendulum arc(kinda pog) whils maintaining a rotaion that changes with the direction to the center(pog).
+            //but moving the camera up, down, left, or right will not change the pendulum swing of the object, it will remain the down position because of gravity
+
+            //for the time being, that feature is not needed, i will work on it later because it is very confusing imo
+
+
+
+
+            //old system for picking up, held by the center of the object
+
+            //Vector3 direction = (holdPoint.transform.position - currentObjectHeld.transform.position);
+
+            ////variables
+            //var acceleration = direction * pickUpForce;
+            //var objectVelocityDirection = hit.rigidbody.velocity.normalized; //e.g (0.5, 0, 1)
+            //var targetDirection = direction.normalized; // e.g (0.4, 1, -1)
+
+            ////if the object velocity direction is SIMILAR to the target direction, slow down the speed
+            //if (objectVelocityDirection.x > 0 && targetDirection.x > 0 || objectVelocityDirection.x < 0 && targetDirection.x < 0 ||
+            //    objectVelocityDirection.y > 0 && targetDirection.y > 0 || objectVelocityDirection.y < 0 && targetDirection.y < 0 ||
+            //    objectVelocityDirection.z > 0 && targetDirection.z > 0 || objectVelocityDirection.z < 0 && targetDirection.z < 0)
+
+            //    //Okay so currently, With this system, the object feels very smooth to move around and you can throw it,
+            //    //but If you strafe or move without moving the mouse, the object will be very jittery. This will work for a Demo,
+            //    //but will need to be adjusted for a 3D half build
+            //    hit.rigidbody.velocity *= 0.98f;
+
+            //if (direction.magnitude != 0)
+            //    hit.rigidbody.velocity = hit.rigidbody.velocity + acceleration;
         }
         if (pickUpTimer > 0)
             pickUpTimer = pickUpTimer - Time.deltaTime;
@@ -85,7 +147,7 @@ public class PlayerPickup : MonoBehaviour
         {
             if (pickUpAction.IsPressed()) //if the player is pressing the button to hold:
             {
-                Debug.Log("huh");
+                //Debug.Log("huh");
                 // set up raycast
                 Ray ray = new Ray(player.cam.transform.position, player.cam.transform.forward);
                 if (Physics.Raycast(ray, out hit, pickUpRange, holdMasks)) //and we hit something in range in the correct layer
@@ -115,14 +177,27 @@ public class PlayerPickup : MonoBehaviour
 
     void HoldObject()
     {
-        hit.collider.gameObject.transform.parent = holdPoint;
-        currentObjectHeld = hit.collider.gameObject; //make the hit object, the held object
+        objectHit = hit;
+        artificialCenterPoint.position = objectHit.point;
+        //objectHit.collider.gameObject.transform.parent = player.transform;
+        objectHit.collider.gameObject.transform.parent = artificialCenterPoint;
+        artificialCenterPoint.position = holdPoint.position;
+
+
+        //hit.rigidbody.useGravity = false;
+
+
+        currentObjectHeld = objectHit.collider.gameObject; //make the hit object, the held object
+        localObjectPos = currentObjectHeld.transform.localPosition;
+        //localObjectRot = currentObjectHeld.transform.rotation;
+        vectorToContact = (artificialCenterPoint.transform.position - currentObjectHeld.transform.position);
+
         pickedUp = true;
     }
 
     void DropObject()
     {
-        
+        //hit.rigidbody.useGravity = true;
         currentObjectHeld.transform.parent = null;
         currentObjectHeld = null; //stop picking it up
         pickedUp = false;
