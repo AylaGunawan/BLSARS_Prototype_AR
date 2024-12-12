@@ -278,9 +278,9 @@
       "url": "https://packages.unity.com"
     },
     "com.whisper.unity": {
-      "version": "file:C:/Unity/com.whisper.unity",
+      "version": "file:com.whisper.unity",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {}
     },
     "com.unity.modules.ai": {
